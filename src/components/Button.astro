@@ -1,0 +1,45 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'accent' | 'dark' | 'outline';
+  disabled?: boolean;
+  /** Explains a disabled state to screen readers. */
+  note?: string;
+  type?: 'button' | 'submit';
+  class?: string;
+}
+
+const { href, variant = 'accent', disabled = false, note, type = 'button', class: extra = '' } =
+  Astro.props;
+
+const base =
+  'inline-flex items-center justify-center rounded-edge px-7 py-3.5 text-label font-medium no-underline transition-colors duration-150';
+
+// Text on the orange fill is black, not white: white reaches only 3.4:1 on it.
+const variants = {
+  accent: 'bg-accent text-ink hover:bg-accent/85',
+  dark: 'bg-ink text-white hover:bg-body',
+  outline: 'border border-line bg-white text-ink hover:border-ink',
+} as const;
+
+const className = `${base} ${
+  disabled ? 'cursor-not-allowed border border-line bg-white text-muted-text' : variants[variant]
+} ${extra}`;
+---
+
+{
+  disabled ? (
+    <button class={className} type={type} disabled>
+      <slot />
+      {note && <span class="sr-only">{note}</span>}
+    </button>
+  ) : href ? (
+    <a class={className} href={href}>
+      <slot />
+    </a>
+  ) : (
+    <button class={className} type={type}>
+      <slot />
+    </button>
+  )
+}

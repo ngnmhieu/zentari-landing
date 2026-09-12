@@ -1,0 +1,16 @@
+---
+/* Wraps content that is not yet true. Marked visibly on purpose: a
+   placeholder that looks finished is the one that ships by accident.
+   Delete the wrapper once the content behind it is real. */
+interface Props {
+  note: string;
+  class?: string;
+}
+
+const { note, class: extra = '' } = Astro.props;
+---
+
+<div class={`rounded-edge border border-dashed border-accent-text/45 p-5 ${extra}`}>
+  <p class="mb-4 text-micro text-accent-text">Placeholder — {note}</p>
+  <slot />
+</div>

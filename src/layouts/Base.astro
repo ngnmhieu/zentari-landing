@@ -1,21 +1,31 @@
 ---
-import { site } from '../data/site';
+import Nav from '../components/Nav.tsx';
+import Footer from '../components/Footer.astro';
+import { contact, site } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
   title: string;
-  /** Omitted until there is real copy: an empty description meta is worse
-      than none at all. */
+  /** Omitted when empty: a blank description meta is worse than none. */
   description?: string;
-  /** Use the title verbatim, without the company name appended. */
   standaloneTitle?: boolean;
 }
 
 const { title, description, standaloneTitle = false } = Astro.props;
 
-// On the home page "Zentari — Zentari" would say the same thing twice.
 const pageTitle = standaloneTitle ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+
+// Search engines read this as fact, so only fields with a real value go in.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  description: site.tagline,
+  url: site.url,
+  ...(contact.email ? { email: contact.email } : {}),
+  ...(contact.phoneHref ? { telephone: contact.phoneHref.replace('tel:', '') } : {}),
+};
 ---
 
 <!doctype html>
@@ -36,14 +46,36 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <noscript>
+      <style>
+        /* Without JavaScript the island never hydrates, so the menu button
+           cannot open anything. Show the links and hide the button instead. */
+        #site-nav {
+          display: flex !important;
+        }
+        [aria-controls='site-nav'] {
+          display: none !important;
+        }
+      </style>
+    </noscript>
   </head>
-  <body class="bg-white text-neutral-900 antialiased">
+  <body class="bg-white font-sans text-body leading-[1.4] text-body antialiased">
     <a
-      class="absolute top-0 left-2 z-50 -translate-y-24 rounded-full bg-white px-4 py-2.5 no-underline transition-transform focus:translate-y-2"
+      class="absolute top-0 left-2 z-100 rounded-edge bg-accent px-4 py-2.5 text-ink no-underline transition-transform focus:translate-y-2 -translate-y-24"
       href="#content">Skip to content</a
     >
+    <header class="sticky top-0 z-50 border-b border-line bg-white">
+      <div
+        class="relative mx-auto flex min-h-18 w-full max-w-shell items-center justify-between gap-6 px-gutter"
+      >
+        <a class="text-h5 font-medium text-ink no-underline" href="/">{site.name}</a>
+        <Nav client:load />
+      </div>
+    </header>
     <main id="content">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>

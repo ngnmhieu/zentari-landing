@@ -1,14 +1,101 @@
+/* Self-hosted rather than pulled from Google: one less third party, one less
+   roundtrip before text paints. Font import precedes Tailwind so the
+   @font-face rules land ahead of the utility layers. */
+@import '@fontsource-variable/inter';
 @import 'tailwindcss';
 
 @plugin '@tailwindcss/typography';
 
-/* Markdown is not a source of class names. Without these lines Tailwind builds
-   utilities out of prose — README and CLAUDE.md talk about classes without
-   using them. */
+/* Markdown is not a source of class names. Without this, Tailwind builds
+   utilities out of prose — CLAUDE.md discusses classes without using them. */
 @source not '../../*.md';
 
-/* The design system goes here as Tailwind theme variables — colours, type
-   scale, spacing — once Zentari's brand is decided. Empty on purpose: the
-   defaults are placeholders, not choices. */
+/* ══════════════════════════════════════════════════════════════════════════
+   Design tokens taken from the reference layout this page follows:
+   Inter throughout, near-square 2px corners, a warm off-white band alternating
+   with white, one orange accent, and headings tracked in at -0.03em.
+
+   Desktop values are the reference's own; the clamp() lower bounds are ours,
+   since the reference sets fixed pixel sizes that would overflow a phone.
+   ══════════════════════════════════════════════════════════════════════════ */
+
 @theme {
+  --color-ink: #000000;
+  --color-body: #4b4a4a;
+  --color-muted: #999999;
+  --color-shell: #f4f0f0;
+  --color-line: #e5e5e5;
+  --color-accent: #e2652a;
+  /* Darkened from the reference's #e2652a, which reaches only 3.4:1 on white.
+     Used wherever the orange carries text rather than fills a shape. */
+  --color-accent-text: #b54413;
+  /* The reference sets #999999 for small print, which reaches 2.9:1 on white.
+     This is the darkest value that still reads as a step down from body. */
+  --color-muted-text: #6e6e6e;
+
+  --font-sans: 'Inter Variable', Inter, 'Helvetica Neue', Arial, sans-serif;
+
+  --text-micro: 0.75rem;
+  --text-small: 0.875rem;
+  --text-label: 1rem;
+  --text-body: clamp(1.0625rem, 1.03rem + 0.16vw, 1.1875rem);
+  --text-lead: clamp(1.15rem, 1.08rem + 0.3vw, 1.375rem);
+  --text-h6: clamp(1.125rem, 1.06rem + 0.28vw, 1.375rem);
+  --text-h5: clamp(1.2rem, 1.1rem + 0.42vw, 1.5rem);
+  --text-h4: clamp(1.5rem, 1.28rem + 0.95vw, 2.125rem);
+  --text-h3: clamp(1.65rem, 1.35rem + 1.3vw, 2.375rem);
+  --text-h2: clamp(2rem, 1.5rem + 2.2vw, 2.875rem);
+  --text-display: clamp(2.5rem, 1.6rem + 4vw, 4.25rem);
+
+  /* Headings carry their weight with their size. A new size added here needs
+     its own --font-weight line or it inherits body weight. */
+  --text-h6--font-weight: 500;
+  --text-h5--font-weight: 500;
+  --text-h4--font-weight: 500;
+  --text-h3--font-weight: 500;
+  --text-h2--font-weight: 500;
+  --text-display--font-weight: 500;
+
+  --radius-edge: 2px;
+
+  /* The reference's 1199px content column inside a 1600px outer bound. */
+  --container-shell: 1199px;
+  --container-wide: 1600px;
+  --container-measure: 809px;
+
+  --spacing-band: clamp(3.5rem, 7vw, 6.25rem);
+  --spacing-gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-accent-text);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }

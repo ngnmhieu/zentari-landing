@@ -1,10 +1,310 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../data/site';
+import Button from '../components/Button.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import Unverified from '../components/Unverified.astro';
+import {
+  articleCount,
+  heroStats,
+  industries,
+  proofStats,
+  questions,
+  services,
+  site,
+  steps,
+  testimonialCount,
+} from '../data/site';
+
+const shell = 'mx-auto w-full max-w-shell px-gutter';
+const pad = (n: number) => String(n + 1).padStart(2, '0');
 ---
 
-<Base title={site.name} standaloneTitle>
-  <section class="mx-auto flex min-h-screen max-w-3xl items-center px-6">
-    <h1 class="text-4xl font-medium tracking-tight">{site.name}</h1>
+<Base
+  title={site.name}
+  description="Zentari books ocean, air and road freight, clears customs and delivers to the door, with one coordinator owning your shipment from quote to arrival."
+  standaloneTitle
+>
+  {/* ── Hero ─────────────────────────────────────────────────────────── */}
+  <section class="bg-white">
+    <div class={`${shell} grid items-center gap-12 py-band lg:grid-cols-2 lg:gap-16`}>
+      <div>
+        <h1 class="text-display text-ink">Moving your freight, and the date you promised.</h1>
+        <p class="mt-6 max-w-[46ch] text-lead text-body">
+          Zentari books ocean, air and road freight for companies that plan around an arrival date.
+          One coordinator owns the shipment from the quote to the moment it is unloaded.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <Button href="#quote">Request a quote</Button>
+          <Button href="#services" variant="outline">See our services</Button>
+        </div>
+
+        <Unverified
+          class="mt-10 max-w-md"
+          note="replace both figures with real numbers, then delete this wrapper"
+        >
+          <dl class="grid grid-cols-2 gap-8">
+            {
+              heroStats.map((stat) => (
+                <div>
+                  <dd class="ml-0 text-h3 font-medium text-ink">{stat.value}</dd>
+                  <dt class="mt-1 text-small text-muted-text">{stat.label}</dt>
+                </div>
+              ))
+            }
+          </dl>
+        </Unverified>
+      </div>
+
+      <ImageSlot ratio="5 / 4" label="hero image, e.g. a container terminal or your own fleet" />
+    </div>
+  </section>
+
+  {/* ── Proof band ───────────────────────────────────────────────────── */}
+  <section class="border-y border-line bg-shell">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[22ch] text-h2 text-ink">Logistics that keeps up with what you promised.</h2>
+      <p class="mt-5 max-w-measure text-lead text-body">
+        Freight goes wrong in the gaps between carriers, brokers and warehouses. We hold those gaps
+        ourselves so a delay surfaces as a phone call, not as a missing pallet.
+      </p>
+
+      <Unverified
+        class="mt-12"
+        note="four headline figures, straight from the TMS — then delete this wrapper"
+      >
+        <dl class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            proofStats.map((stat) => (
+              <div class="border-t border-line pt-5">
+                <dd class="ml-0 text-h4 font-medium text-ink">{stat.value}</dd>
+                <dt class="mt-1 text-small text-muted-text">{stat.label}</dt>
+              </div>
+            ))
+          }
+        </dl>
+      </Unverified>
+    </div>
+  </section>
+
+  {/* ── Services ─────────────────────────────────────────────────────── */}
+  <section id="services" class="scroll-mt-20 bg-white">
+    <div class={`${shell} py-band`}>
+      <div class="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div>
+          <h2 class="max-w-[20ch] text-h2 text-ink">Everything it takes to keep goods moving.</h2>
+          <p class="mt-5 max-w-measure text-lead text-body">
+            Take a single leg or hand us the whole route. Either way the paperwork and the handovers
+            are ours to get right.
+          </p>
+        </div>
+        <div class="rounded-edge border border-line bg-shell p-6 lg:max-w-xs">
+          <p class="text-h6 font-medium text-ink">Not sure which service fits?</p>
+          <p class="mt-2 text-small text-body">
+            Describe the shipment and we will tell you the cheapest way and the fastest way, with
+            the cost of each.
+          </p>
+          <Button class="mt-5 w-full" href="#quote" variant="dark">Ask us</Button>
+        </div>
+      </div>
+
+      <ol class="mt-14 grid list-none gap-x-8 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          services.map((service, index) => (
+            <li>
+              <ImageSlot ratio="3 / 2" label={`${service.name.toLowerCase()} image`} />
+              <p class="mt-5 text-small font-medium text-accent-text">{pad(index)}</p>
+              <h3 class="mt-1 text-h5 text-ink">{service.name}</h3>
+              <p class="mt-2 text-body">{service.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ── Process. Numbered because it genuinely is a sequence. ─────────── */}
+  <section id="process" class="scroll-mt-20 border-y border-line bg-shell">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[18ch] text-h2 text-ink">A simpler way to ship.</h2>
+      <p class="mt-5 max-w-measure text-lead text-body">
+        Four steps from the first email to an unloaded delivery, with a named person on each one.
+      </p>
+      <ol class="mt-14 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          steps.map((step, index) => (
+            <li class="border-t border-line pt-5">
+              <p class="text-small font-medium text-accent-text">{pad(index)}</p>
+              <h3 class="mt-2 text-h6 text-ink">{step.name}</h3>
+              <p class="mt-2 text-body">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ── Industries ───────────────────────────────────────────────────── */}
+  <section id="industries" class="scroll-mt-20 bg-white">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[20ch] text-h2 text-ink">Built for the freight your industry runs on.</h2>
+      <dl class="mt-14 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          industries.map((industry) => (
+            <div class="rounded-edge border border-line p-7">
+              <dt class="text-h6 font-medium text-ink">{industry.name}</dt>
+              <dd class="mt-2 ml-0 text-body">{industry.body}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {/* ── Quote request. Not wired to anything yet. ─────────────────────── */}
+  <section id="quote" class="scroll-mt-20 border-y border-line bg-shell">
+    <div class={`${shell} grid gap-12 py-band lg:grid-cols-2 lg:gap-16`}>
+      <div>
+        <h2 class="max-w-[16ch] text-h2 text-ink">Tell us what you are shipping.</h2>
+        <p class="mt-5 max-w-[46ch] text-lead text-body">
+          Origin, destination and roughly what it is. That is enough for us to come back with
+          options, the transit time and the full cost of each.
+        </p>
+      </div>
+
+      <Unverified note="this form has no backend — connect it to an inbox or a form service">
+        <form class="grid gap-5" aria-describedby="quote-status">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="grid gap-1.5 text-small text-ink">
+              <span>Your name</span>
+              <input
+                type="text"
+                name="name"
+                autocomplete="name"
+                class="rounded-edge border border-line bg-white px-3.5 py-3 text-body text-ink focus:border-ink"
+              />
+            </label>
+            <label class="grid gap-1.5 text-small text-ink">
+              <span>Work email</span>
+              <input
+                type="email"
+                name="email"
+                autocomplete="email"
+                class="rounded-edge border border-line bg-white px-3.5 py-3 text-body text-ink focus:border-ink"
+              />
+            </label>
+            <label class="grid gap-1.5 text-small text-ink">
+              <span>Collecting from</span>
+              <input
+                type="text"
+                name="origin"
+                placeholder="City or port"
+                class="rounded-edge border border-line bg-white px-3.5 py-3 text-body text-ink focus:border-ink"
+              />
+            </label>
+            <label class="grid gap-1.5 text-small text-ink">
+              <span>Delivering to</span>
+              <input
+                type="text"
+                name="destination"
+                placeholder="City or port"
+                class="rounded-edge border border-line bg-white px-3.5 py-3 text-body text-ink focus:border-ink"
+              />
+            </label>
+          </div>
+          <label class="grid gap-1.5 text-small text-ink">
+            <span>What is moving</span>
+            <textarea
+              name="cargo"
+              rows="3"
+              placeholder="Goods, weight, dimensions, and the date it needs to land"
+              class="rounded-edge border border-line bg-white px-3.5 py-3 text-body text-ink focus:border-ink"
+            ></textarea>
+          </label>
+          <div class="flex flex-wrap items-center gap-4">
+            <Button type="submit" disabled note="This form is not connected yet.">
+              Send request
+            </Button>
+            <p id="quote-status" class="text-small text-muted-text">Not connected yet.</p>
+          </div>
+        </form>
+      </Unverified>
+    </div>
+  </section>
+
+  {/* ── What customers say. Nothing real to put here yet. ─────────────── */}
+  <section class="bg-white">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[22ch] text-h2 text-ink">What the people who ship with us say.</h2>
+      <Unverified
+        class="mt-10"
+        note="collect real quotes with written permission, including name, role and company"
+      >
+        <div class="grid gap-8 lg:grid-cols-3">
+          {
+            Array.from({ length: testimonialCount }).map(() => (
+              <blockquote class="m-0 rounded-edge border border-line p-7">
+                <p class="text-h6 text-muted-text">Customer quote goes here.</p>
+                <footer class="mt-5 text-small text-muted-text">Name, role, company</footer>
+              </blockquote>
+            ))
+          }
+        </div>
+      </Unverified>
+    </div>
+  </section>
+
+  {/* ── Insights. Layout slot; no articles written yet. ───────────────── */}
+  <section class="border-y border-line bg-shell">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[20ch] text-h2 text-ink">Notes on shipping smarter.</h2>
+      <Unverified
+        class="mt-10"
+        note="write the articles, then swap this for a content collection under src/content/"
+      >
+        <div class="grid gap-8 lg:grid-cols-3">
+          {
+            Array.from({ length: articleCount }).map(() => (
+              <article>
+                <ImageSlot ratio="3 / 2" label="article thumbnail" />
+                <h3 class="mt-5 text-h6 text-muted-text">Article title goes here</h3>
+                <p class="mt-2 text-small text-muted-text">A sentence of standfirst.</p>
+              </article>
+            ))
+          }
+        </div>
+      </Unverified>
+    </div>
+  </section>
+
+  {/* ── Questions ────────────────────────────────────────────────────── */}
+  <section id="questions" class="scroll-mt-20 bg-white">
+    <div class={`${shell} py-band`}>
+      <h2 class="max-w-[18ch] text-h2 text-ink">Shipping questions, answered.</h2>
+      <div class="mt-10 max-w-measure">
+        {
+          questions.map((item) => (
+            <details class="border-t border-line last:border-b">
+              <summary class="cursor-pointer list-none py-5 text-h6 font-medium text-ink marker:content-['']">
+                {item.q}
+              </summary>
+              <p class="pb-5 text-body">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ── Closing ──────────────────────────────────────────────────────── */}
+  <section class="bg-ink">
+    <div class={`${shell} py-band text-center`}>
+      <h2 class="mx-auto max-w-[20ch] text-h2 text-white">Ready to move your next shipment?</h2>
+      <p class="mx-auto mt-5 max-w-[48ch] text-lead text-white/70">
+        Send us a lane and see what comes back. Most quotes land the same working day.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <Button href="#quote">Request a quote</Button>
+      </div>
+    </div>
   </section>
 </Base>
