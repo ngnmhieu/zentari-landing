@@ -1,0 +1,49 @@
+---
+import { site } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  /** Omitted until there is real copy: an empty description meta is worse
+      than none at all. */
+  description?: string;
+  /** Use the title verbatim, without the company name appended. */
+  standaloneTitle?: boolean;
+}
+
+const { title, description, standaloneTitle = false } = Astro.props;
+
+// On the home page "Zentari — Zentari" would say the same thing twice.
+const pageTitle = standaloneTitle ? title : `${title} — ${site.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth motion-reduce:scroll-auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <link rel="icon" href="/favicon/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body class="bg-white text-neutral-900 antialiased">
+    <a
+      class="absolute top-0 left-2 z-50 -translate-y-24 rounded-full bg-white px-4 py-2.5 no-underline transition-transform focus:translate-y-2"
+      href="#content">Skip to content</a
+    >
+    <main id="content">
+      <slot />
+    </main>
+  </body>
+</html>

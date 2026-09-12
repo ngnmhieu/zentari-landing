@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+/* Markdown is not a source of class names. Without these lines Tailwind builds
+   utilities out of prose — README and CLAUDE.md talk about classes without
+   using them. */
+@source not '../../*.md';
+
+/* The design system goes here as Tailwind theme variables — colours, type
+   scale, spacing — once Zentari's brand is decided. Empty on purpose: the
+   defaults are placeholders, not choices. */
+@theme {
+}
