@@ -15,7 +15,10 @@ Same stack as `~/Projects/personal/hoiansushi`, which has worked examples of
 components, layout and theming.
 
 - `npm run dev` — dev server
-- `npm run build` — static build into `docs/`
+- `npm run clean` — `rm -rf docs`
+- `npm run build` — cleans, then a static build into `docs/`. Astro empties
+  `outDir` on its own, so the clean step is belt and braces: it states the
+  intent, and it still holds if `outDir` moves or that behaviour changes.
 - `npm run check` — `astro check`, type-checks `.astro` and `.ts`
 
 Tailwind is wired through the Vite plugin (`@tailwindcss/vite`), not PostCSS
