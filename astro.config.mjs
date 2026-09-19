@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://zentari.one',
   integrations: [react(), sitemap()],
+  outDir: './docs',
   build: { format: 'directory' },
   vite: { plugins: [tailwindcss()] },
 });

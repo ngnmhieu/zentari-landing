@@ -15,7 +15,7 @@ Same stack as `~/Projects/personal/hoiansushi`, which has worked examples of
 components, layout and theming.
 
 - `npm run dev` — dev server
-- `npm run build` — static build into `dist/`
+- `npm run build` — static build into `docs/`
 - `npm run check` — `astro check`, type-checks `.astro` and `.ts`
 
 Tailwind is wired through the Vite plugin (`@tailwindcss/vite`), not PostCSS
@@ -26,8 +26,25 @@ configured in CSS, and the design tokens live in the `@theme` block in
 `global.css` carries `@source not '../../*.md'`. Without it Tailwind scans
 this file for class names and generates utilities out of prose.
 
-Deploy target is not decided. `site` in `astro.config.mjs` is
-`https://zentari.one`; the build writes to the default `dist/`, gitignored.
+Detection is automatic over everything `.gitignore` does not exclude, so a
+stray build directory left in the tree is read as source: an old `dist/` put
+`.fixed`, `.block`, `.transition` and a dozen more unused rules into the
+stylesheet, lifted out of the previous build's own markup. `docs/` escapes
+this only because Astro empties it before Tailwind runs. Delete build output
+you are no longer publishing rather than leaving it to be scanned.
+
+Deployed on GitHub Pages, serving `/docs` off `main`. There is no CI: the
+build is run locally and `docs/` is committed with the source change, or the
+live site does not move. `site` is the custom domain `https://zentari.one`.
+`outDir` is `./docs` and Astro empties it at the start of every build, so
+nothing may be hand-written there — files the deploy needs are generated from
+`public/`, which is copied across verbatim:
+
+- `public/CNAME` holds the custom domain. GitHub expects CNAME inside the
+  published folder, so a hand-placed one in `docs/` dies on the next build.
+- `public/.nojekyll` stops Pages running the output through Jekyll, which
+  skips underscore-prefixed directories and would serve nothing out of
+  `_astro/` — every stylesheet and script the page loads.
 
 ## Design
 
