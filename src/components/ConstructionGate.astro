@@ -1,0 +1,140 @@
+---
+/* A curtain over the site while it is being built.
+
+   This is not security, and must not be described to anyone as though it
+   were. Every page ships to the browser in full before this runs, so the
+   content is in the response body and in the published files either way;
+   the check below can be stepped over by anyone who opens devtools. What it
+   does is keep a passer-by, a shared link or a stray crawler from reading an
+   unfinished site. Treat anything behind it as public.
+
+   Delete this component and its two lines in Base.astro when the site opens.
+*/
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-full.png';
+
+/* The password as a SHA-256 digest rather than the word itself: the repository
+   is public and this at least keeps it out of a plain-text search. The gate is
+   no stronger for it. Stored under the same digest, so changing the password
+   here also turns away everyone who unlocked the old one. */
+const passwordHash = 'f5b5ce5325fbcfabeb19a1d0369070c523529930838b84d293ad03a601c12d9b';
+const storageKey = 'zentari:preview';
+---
+
+<div
+  id="construction-gate"
+  class="fixed inset-0 z-200 flex items-center justify-center overflow-y-auto bg-[#00030f] px-gutter py-12"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="gate-title"
+>
+  <div class="w-full max-w-lg text-center">
+    {/* #00030f is the owner's, and close enough to the artwork's own ground
+        that the image reads as part of the panel rather than a rectangle on
+        it. Left as a literal: a token would imply it outlives the gate. */}
+    <Image
+      src={logo}
+      alt="Zentari"
+      widths={[420, 840]}
+      sizes="(min-width: 32rem) 26rem, 88vw"
+      format="webp"
+      quality={80}
+      loading="eager"
+      fetchpriority="high"
+      class="mx-auto w-full max-w-104"
+    />
+
+    <h1 id="gate-title" class="mt-2 text-h4 text-white">The site is currently in construction</h1>
+    <p class="mt-3 text-white/85">
+      Please enter the provided password to preview.
+    </p>
+
+    <form id="gate-form" class="mt-8 flex flex-col gap-3 sm:flex-row" novalidate>
+      <label class="sr-only" for="gate-password">Password</label>
+      <input
+        id="gate-password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Preview password"
+        required
+        class="min-w-0 flex-1 rounded-edge border border-white/25 bg-white/10 px-4 py-3 text-label text-white placeholder:text-white/65 focus:border-white focus:outline-none"
+      />
+      <button
+        type="submit"
+        class="rounded-edge bg-primary px-7 py-3 text-label font-medium text-white transition-colors hover:bg-primary/90"
+      >
+        Enter
+      </button>
+    </form>
+
+    <p id="gate-error" class="mt-4 text-small text-white" role="alert" hidden>
+      That is not the password.
+    </p>
+  </div>
+</div>
+
+<script is:inline define:vars={{ passwordHash, storageKey }}>
+  (() => {
+    const gate = document.getElementById('construction-gate');
+
+    /* Runs the moment the curtain is parsed, before the rest of the page, so
+       somebody who has already unlocked never sees it flash. */
+    try {
+      if (localStorage.getItem(storageKey) === passwordHash) {
+        gate.remove();
+        return;
+      }
+    } catch {
+      /* Private mode, or storage refused: fall through and ask again. */
+    }
+
+    const root = document.documentElement;
+    const behind = () =>
+      [...document.body.children].filter((el) => el !== gate && el.tagName !== 'SCRIPT');
+
+    root.style.overflow = 'hidden';
+    /* The rest of the body does not exist yet at this point in the parse, so
+       taking it out of the tab order waits until it does. */
+    document.addEventListener('DOMContentLoaded', () => {
+      behind().forEach((el) => el.setAttribute('inert', ''));
+      document.getElementById('gate-password').focus();
+    });
+
+    const open = () => {
+      behind().forEach((el) => el.removeAttribute('inert'));
+      root.style.removeProperty('overflow');
+      gate.remove();
+    };
+
+    const digest = async (value) => {
+      const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+      return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    const error = document.getElementById('gate-error');
+    const input = document.getElementById('gate-password');
+
+    document.getElementById('gate-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      error.hidden = true;
+
+      /* crypto.subtle exists only in a secure context: https, or localhost.
+         Opening the built file straight off disk has neither. */
+      const entered = crypto?.subtle ? await digest(input.value) : null;
+      if (entered !== passwordHash) {
+        error.hidden = false;
+        input.select();
+        return;
+      }
+
+      try {
+        localStorage.setItem(storageKey, entered);
+      } catch {
+        /* Storage refused: they are in for this page view, and will be asked
+           again next time. Better than refusing to let them in at all. */
+      }
+      open();
+    });
+  })();
+</script>

@@ -98,5 +98,12 @@ white. Check any new pair before using it.
   content lands — never quietly restyle a placeholder to look finished.
 - Empty fields in `contact` are hidden rather than printed, and the
   schema.org block omits them. Search engines read that block as fact.
+- `ConstructionGate.astro` curtains the site while it is being built. It is
+  not access control and must never be described as any: the whole page is in
+  the response before the gate runs, and the published files are readable
+  without it. Anything behind it is public. It asks for a password, keeps the
+  answer's digest in `localStorage` under `zentari:preview`, and changing the
+  password in the component turns away everyone who unlocked the old one.
+  Delete the component and its line in `Base.astro` when the site opens.
 - The quote form has no backend. Its submit button is disabled and labelled
   as such, rather than silently doing nothing.
