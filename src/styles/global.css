@@ -13,7 +13,8 @@
 /* ══════════════════════════════════════════════════════════════════════════
    Design tokens taken from the reference layout this page follows:
    Inter throughout, near-square 2px corners, a warm off-white band alternating
-   with white, one orange accent, and headings tracked in at -0.03em.
+   with white, one accent, and headings tracked in at -0.03em. The accent is
+   Zentari's blue, not the reference's orange.
 
    Desktop values are the reference's own; the clamp() lower bounds are ours,
    since the reference sets fixed pixel sizes that would overflow a phone.
@@ -25,18 +26,19 @@
   --color-muted: #999999;
   --color-shell: #f4f0f0;
   --color-line: #e5e5e5;
-  /* Calls to action, in the blue of the logo's Z rather than an arbitrary
-     navy. Unlike the orange this one carries white, not black: 6.8:1, and
-     5.6:1 in the lightened hover state. Lighter than it first was so the
-     button reads as a shape against the darkened hero photograph — the two
-     demands pull apart, since a fill light enough to clear 3:1 against that
-     band is already too light to hold white text. This sits where the button
-     is as visible as it can be without the label giving way. */
+  /* Zentari's blue, from the logo's Z. One value does both jobs here, which
+     the reference's orange could not: it fills a shape, and on the light
+     bands it carries text at 6.8:1 on white and 6.0:1 on the shell grey.
+     As a fill it carries white — black reaches only 3.1:1 on it. It is also
+     lighter than a navy on purpose, so a button still reads as a shape
+     against the darkened hero photograph; a fill light enough to clear 3:1
+     against that band could no longer hold white text, so this sits at the
+     point where the button is as visible as it can be without the label
+     giving way. */
   --color-primary: #1a4fd0;
-  --color-accent: #e2652a;
-  /* Darkened from the reference's #e2652a, which reaches only 3.4:1 on white.
-     Used wherever the orange carries text rather than fills a shape. */
-  --color-accent-text: #b54413;
+  /* The same blue lifted for the black bands, where #1a4fd0 falls to 3.1:1
+     and the footer's small print needs 4.5. Reaches 8.8:1 there. */
+  --color-primary-light: #7da6ff;
   /* The reference sets #999999 for small print, which reaches 2.9:1 on white.
      This is the darkest value that still reads as a step down from body. */
   --color-muted-text: #6e6e6e;
@@ -77,7 +79,7 @@
 
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-accent-text);
+    outline: 2px solid var(--color-primary);
     outline-offset: 3px;
     border-radius: 1px;
   }

@@ -61,21 +61,27 @@ nothing may be hand-written there — files the deploy needs are generated from
 The layout follows a reference the owner chose: `ciketo.framer.website`.
 Tokens in `@theme` were measured off that page — Inter, 2px corners, a 1199px
 content column, `-0.03em` on headings, white bands alternating with `#f4f0f0`,
-one orange accent. Match it when adding sections.
+one accent. Match it when adding sections.
 
-Calls to action are the exception: `--color-primary`, a dark blue taken from
-the logo, carrying white. The orange stayed behind on the things that mark
-rather than invite — the step numerals, the `Unverified` and `ImageSlot`
-frames, the skip link — and where it is a fill it still carries black. Two
-accents is one more than the reference runs, so a new element takes the blue
-only if it is something to click.
+The accent is not the reference's: Zentari's colours are blue and black, so
+`--color-primary` carries everything the orange used to — buttons, the step
+numerals, the `Unverified` and `ImageSlot` frames, the skip link, the focus
+ring. Black is the secondary, and stays where it is. There is no orange in
+the theme any more; do not reintroduce one from the reference.
+
+One blue does both jobs, which the orange could not. It fills a shape and it
+carries text on the light bands, 6.8:1 on white and 6.0:1 on the shell grey.
+As a fill it carries white, since black reaches only 3.1:1 on it — the
+opposite of the rule the orange needed. The black bands are where it gives
+out: `--color-primary-light` exists for those, and is what the footer's small
+print uses.
 
 The hero is the one band that departs from that rhythm: a full-bleed
 photograph under a 70% black wash, with white type on top. Every pair there
 was checked against the brightest pixel the photograph can put behind the
-text, so a lighter wash or a lighter photograph needs re-checking, and the
-orange marking on `Unverified` cannot reach AA on it at all — that block
-passes `tone="dark"` and marks itself in white instead.
+text, so a lighter wash or a lighter photograph needs re-checking. Neither
+blue reaches AA on that band — `--color-primary-light` gets to 3.7:1 there —
+so the `Unverified` block passes `tone="dark"` and marks itself in white.
 
 The bar is fixed and out of the flow so that photograph can run up behind
 it: clear over the hero, and dark from 8px of scroll onwards, toggled by a
@@ -85,10 +91,9 @@ states, which is why the small-screen menu panel is dark too.
 Copy and photography are Zentari's own and must stay that way. Do not paste
 text or images across from the reference.
 
-Two of the reference's own colour pairs fail WCAG AA, so the theme carries
-darkened variants for text: `--color-accent-text` and `--color-muted-text`.
-The orange `--color-accent` is a fill only, and text on it is black, not
-white. Check any new pair before using it.
+The reference's own small print, `#999999`, fails WCAG AA on white, so the
+theme carries `--color-muted-text` in its place. Check any new pair before
+using it — every colour decision in here was made by checking one.
 
 ## Decisions
 

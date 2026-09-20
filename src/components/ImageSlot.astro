@@ -13,10 +13,10 @@ const { ratio = '4 / 3', label, class: extra = '' } = Astro.props;
 ---
 
 <div
-  class={`flex items-center justify-center rounded-edge border border-dashed border-accent-text/45 bg-shell p-4 ${extra}`}
+  class={`flex items-center justify-center rounded-edge border border-dashed border-primary/45 bg-shell p-4 ${extra}`}
   style={`aspect-ratio: ${ratio}`}
   role="img"
   aria-label={`Placeholder for ${label}`}
 >
-  <span class="text-center text-micro text-accent-text">Photo needed — {label}</span>
+  <span class="text-center text-micro text-primary">Photo needed — {label}</span>
 </div>

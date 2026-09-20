@@ -4,8 +4,8 @@
    Delete the wrapper once the content behind it is real. */
 interface Props {
   note: string;
-  /** 'dark' for placement on a dark band. The orange marking cannot reach
-      AA on one — no shade of it can — so that tone marks itself in white. */
+  /** 'dark' for placement on a dark band. The blue marking cannot reach AA
+      on the hero's wash — no shade of it can — so that tone goes white. */
   tone?: 'light' | 'dark';
   class?: string;
 }
@@ -13,7 +13,7 @@ interface Props {
 const { note, tone = 'light', class: extra = '' } = Astro.props;
 
 const tones = {
-  light: { frame: 'border-accent-text/45', note: 'text-accent-text' },
+  light: { frame: 'border-primary/45', note: 'text-primary' },
   dark: { frame: 'border-white/55', note: 'text-white' },
 } as const;
 

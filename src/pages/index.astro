@@ -144,7 +144,7 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
           services.map((service, index) => (
             <li>
               <ImageSlot ratio="3 / 2" label={`${service.name.toLowerCase()} image`} />
-              <p class="mt-5 text-small font-medium text-accent-text">{pad(index)}</p>
+              <p class="mt-5 text-small font-medium text-primary">{pad(index)}</p>
               <h3 class="mt-1 text-h5 text-ink">{service.name}</h3>
               <p class="mt-2 text-body">{service.body}</p>
             </li>
@@ -165,7 +165,7 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
         {
           steps.map((step, index) => (
             <li class="border-t border-line pt-5">
-              <p class="text-small font-medium text-accent-text">{pad(index)}</p>
+              <p class="text-small font-medium text-primary">{pad(index)}</p>
               <h3 class="mt-2 text-h6 text-ink">{step.name}</h3>
               <p class="mt-2 text-body">{step.body}</p>
             </li>
