@@ -36,6 +36,13 @@ stylesheet, lifted out of the previous build's own markup. `docs/` escapes
 this only because Astro empties it before Tailwind runs. Delete build output
 you are no longer publishing rather than leaving it to be scanned.
 
+Images divide by how they are used. Photography belongs in `src/assets/` and
+is rendered with `<Image>` from `astro:assets`, which resizes and re-encodes
+it: the hero JPEG is 3 MB on disk and ships as four WebPs of 38–261 KB. Files
+that must reach the output untouched or at a fixed URL — the logo, favicons,
+`CNAME`, `.nojekyll` — stay in `public/`. Dropping a photograph into `public/`
+publishes it at full weight, which is the mistake this note exists to stop.
+
 Deployed on GitHub Pages, serving `/docs` off `main`. There is no CI: the
 build is run locally and `docs/` is committed with the source change, or the
 live site does not move. `site` is the custom domain `https://zentari.one`.
@@ -55,6 +62,25 @@ The layout follows a reference the owner chose: `ciketo.framer.website`.
 Tokens in `@theme` were measured off that page — Inter, 2px corners, a 1199px
 content column, `-0.03em` on headings, white bands alternating with `#f4f0f0`,
 one orange accent. Match it when adding sections.
+
+Calls to action are the exception: `--color-primary`, a dark blue taken from
+the logo, carrying white. The orange stayed behind on the things that mark
+rather than invite — the step numerals, the `Unverified` and `ImageSlot`
+frames, the skip link — and where it is a fill it still carries black. Two
+accents is one more than the reference runs, so a new element takes the blue
+only if it is something to click.
+
+The hero is the one band that departs from that rhythm: a full-bleed
+photograph under a 70% black wash, with white type on top. Every pair there
+was checked against the brightest pixel the photograph can put behind the
+text, so a lighter wash or a lighter photograph needs re-checking, and the
+orange marking on `Unverified` cannot reach AA on it at all — that block
+passes `tone="dark"` and marks itself in white instead.
+
+The bar is fixed and out of the flow so that photograph can run up behind
+it: clear over the hero, and dark from 8px of scroll onwards, toggled by a
+`data-scrolled` attribute an inline script sets. Its type is white in both
+states, which is why the small-screen menu panel is dark too.
 
 Copy and photography are Zentari's own and must stay that way. Do not paste
 text or images across from the reference.

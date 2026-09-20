@@ -4,13 +4,23 @@
    Delete the wrapper once the content behind it is real. */
 interface Props {
   note: string;
+  /** 'dark' for placement on a dark band. The orange marking cannot reach
+      AA on one — no shade of it can — so that tone marks itself in white. */
+  tone?: 'light' | 'dark';
   class?: string;
 }
 
-const { note, class: extra = '' } = Astro.props;
+const { note, tone = 'light', class: extra = '' } = Astro.props;
+
+const tones = {
+  light: { frame: 'border-accent-text/45', note: 'text-accent-text' },
+  dark: { frame: 'border-white/55', note: 'text-white' },
+} as const;
+
+const { frame, note: noteColour } = tones[tone];
 ---
 
-<div class={`rounded-edge border border-dashed border-accent-text/45 p-5 ${extra}`}>
-  <p class="mb-4 text-micro text-accent-text">Placeholder — {note}</p>
+<div class={`rounded-edge border border-dashed ${frame} p-5 ${extra}`}>
+  <p class={`mb-4 text-micro ${noteColour}`}>Placeholder — {note}</p>
   <slot />
 </div>

@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import ImageSlot from '../components/ImageSlot.astro';
 import Unverified from '../components/Unverified.astro';
+import heroBg from '../assets/hero-bg.jpg';
 import {
   articleCount,
   heroStats,
@@ -25,11 +27,40 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
   standaloneTitle
 >
   {/* ── Hero ─────────────────────────────────────────────────────────── */}
-  <section class="bg-white">
-    <div class={`${shell} grid items-center gap-12 py-band lg:grid-cols-2 lg:gap-16`}>
-      <div>
-        <h1 class="text-display text-ink">Moving your freight, and the date you promised.</h1>
-        <p class="mt-6 max-w-[46ch] text-lead text-body">
+  {/* min-h-dvh, not min-h-screen: on phones 100vh is the height the viewport
+      would have with the browser chrome retracted, so the band would sit
+      taller than the screen and the stats would start below the fold. The
+      pt-18 is the fixed bar's own height, kept out of the centring so the
+      copy reads centred in what is actually visible beneath it. */}
+  <section
+    class="relative isolate flex min-h-dvh flex-col justify-center overflow-hidden bg-white pt-18"
+  >
+    <Image
+      src={heroBg}
+      alt=""
+      widths={[640, 960, 1440, 1920]}
+      width={1920}
+      height={1280}
+      sizes="100vw"
+      format="webp"
+      quality={62}
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 -z-20 h-full w-full object-cover"
+    />
+    {/* The photograph runs the full width of the band and the copy sits on
+        top of it, so this overlay is doing the legibility work. Worst case is
+        the brightest pixel in the photo — the overcast sky — under a 70%
+        black wash: that lands at #4a4a4a, where white text reaches 8.9:1,
+        comfortably past AA and past AAA. Lighten the wash and the sky is what
+        breaks first; AA gives out around 50%. The white also holds if the
+        photograph fails to load, since the same wash over the section's white
+        ground gives 8.5:1. */}
+    <div class="absolute inset-0 -z-10 bg-black/70"></div>
+    <div class={`${shell} py-band`}>
+      <div class="max-w-[42rem]">
+        <h1 class="text-display text-white">Moving your freight, and the date you promised.</h1>
+        <p class="mt-6 max-w-[46ch] text-lead text-white">
           Zentari books ocean, air and road freight for companies that plan around an arrival date.
           One coordinator owns the shipment from the quote to the moment it is unloaded.
         </p>
@@ -40,22 +71,23 @@ const pad = (n: number) => String(n + 1).padStart(2, '0');
 
         <Unverified
           class="mt-10 max-w-md"
+          tone="dark"
           note="replace both figures with real numbers, then delete this wrapper"
         >
           <dl class="grid grid-cols-2 gap-8">
             {
               heroStats.map((stat) => (
                 <div>
-                  <dd class="ml-0 text-h3 font-medium text-ink">{stat.value}</dd>
-                  <dt class="mt-1 text-small text-muted-text">{stat.label}</dt>
+                  <dd class="ml-0 text-h3 font-medium text-white">{stat.value}</dd>
+                  {/* Plain white, not the muted-text these labels carry
+                      elsewhere, and not white/80: both fall under AA here. */}
+                  <dt class="mt-1 text-small text-white">{stat.label}</dt>
                 </div>
               ))
             }
           </dl>
         </Unverified>
       </div>
-
-      <ImageSlot ratio="5 / 4" label="hero image, e.g. a container terminal or your own fleet" />
     </div>
   </section>
 

@@ -1,7 +1,7 @@
 ---
 interface Props {
   href?: string;
-  variant?: 'accent' | 'dark' | 'outline';
+  variant?: 'primary' | 'dark' | 'outline';
   disabled?: boolean;
   /** Explains a disabled state to screen readers. */
   note?: string;
@@ -9,15 +9,16 @@ interface Props {
   class?: string;
 }
 
-const { href, variant = 'accent', disabled = false, note, type = 'button', class: extra = '' } =
+const { href, variant = 'primary', disabled = false, note, type = 'button', class: extra = '' } =
   Astro.props;
 
 const base =
   'inline-flex items-center justify-center rounded-edge px-7 py-3.5 text-label font-medium no-underline transition-colors duration-150';
 
-// Text on the orange fill is black, not white: white reaches only 3.4:1 on it.
+// The orange is still a fill that carries black — white reaches only 3.4:1 on
+// it — but calls to action are the blue now, which carries white.
 const variants = {
-  accent: 'bg-accent text-ink hover:bg-accent/85',
+  primary: 'bg-primary text-white hover:bg-primary/90',
   dark: 'bg-ink text-white hover:bg-body',
   outline: 'border border-line bg-white text-ink hover:border-ink',
 } as const;

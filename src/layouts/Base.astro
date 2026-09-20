@@ -65,14 +65,38 @@ const schema = {
       class="absolute top-0 left-2 z-100 rounded-edge bg-accent px-4 py-2.5 text-ink no-underline transition-transform focus:translate-y-2 -translate-y-24"
       href="#content">Skip to content</a
     >
-    <header class="sticky top-0 z-50 border-b border-line bg-white">
+    {/* Fixed rather than sticky, so the hero photograph runs up behind it and
+        the bar can start out transparent. The hero pays for that with matching
+        top padding; any future page whose first band is light will need a dark
+        one of its own, or this bar's white type will vanish into it. */}
+    <header
+      class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-200 data-[scrolled]:border-white/10 data-[scrolled]:bg-ink/95 data-[scrolled]:backdrop-blur data-[menu-open]:border-white/10 data-[menu-open]:bg-ink/95"
+    >
       <div
         class="relative mx-auto flex min-h-18 w-full max-w-shell items-center justify-between gap-6 px-gutter"
       >
-        <a class="text-h5 font-medium text-ink no-underline" href="/">{site.name}</a>
+        <a class="flex items-center no-underline" href="/">
+          <img
+            src="/img/logo-small.png"
+            alt={site.name}
+            width="451"
+            height="100"
+            class="h-7 w-auto"
+          />
+        </a>
         <Nav client:load />
       </div>
     </header>
+    {/* Inline and immediately after the bar, so a page opened part-way down
+        paints with the background already on instead of flashing clear. */}
+    <script is:inline>
+      (() => {
+        const header = document.querySelector('header');
+        const sync = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+        sync();
+        addEventListener('scroll', sync, { passive: true });
+      })();
+    </script>
     <main id="content">
       <slot />
     </main>

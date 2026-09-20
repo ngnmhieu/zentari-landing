@@ -25,6 +25,14 @@
   --color-muted: #999999;
   --color-shell: #f4f0f0;
   --color-line: #e5e5e5;
+  /* Calls to action, in the blue of the logo's Z rather than an arbitrary
+     navy. Unlike the orange this one carries white, not black: 6.8:1, and
+     5.6:1 in the lightened hover state. Lighter than it first was so the
+     button reads as a shape against the darkened hero photograph — the two
+     demands pull apart, since a fill light enough to clear 3:1 against that
+     band is already too light to hold white text. This sits where the button
+     is as visible as it can be without the label giving way. */
+  --color-primary: #1a4fd0;
   --color-accent: #e2652a;
   /* Darkened from the reference's #e2652a, which reaches only 3.4:1 on white.
      Used wherever the orange carries text rather than fills a shape. */
